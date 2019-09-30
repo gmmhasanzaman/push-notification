@@ -6,12 +6,24 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <Button
+    <TextView
+        android:id="@+id/tokenTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Notification"
         android:layout_centerInParent="true"
-        android:id="@+id/notiBtn"
-         />
+        android:layout_margin="10dp"
+        android:padding="10dp"
+        android:textColor="#E91E63"
+        tools:text="Token" />
+
+    <Button
+        android:id="@+id/clickBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tokenTV"
+        android:layout_centerInParent="true"
+        android:text="Click" />
+
+
 
 </RelativeLayout>

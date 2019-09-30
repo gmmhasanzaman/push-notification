@@ -1,10 +1,10 @@
 package com.example.androidnotification;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -13,6 +13,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,7 +29,8 @@ public class MainActivity extends AppCompatActivity {
     public static final String CHANNEL_DESC =
             "com.example.androidnotification.CHANNEL_DESC";
 
-    private Button notiBtn;
+    private Button clickBtn;
+    private TextView tokenTV;
     private PendingIntent pendingIntent;
 
     @Override
@@ -36,14 +43,41 @@ public class MainActivity extends AppCompatActivity {
        /* if android version is greater than or equal Oreo
         then we need to create a notification channel*/
         createChannel();
+
+        /*click notification to go an activity*/
         initAlertDetails();
 
-        notiBtn.setOnClickListener(new View.OnClickListener() {
+        clickBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                displayNotification();
+                //displayNotification();
+
+                createToken();
             }
         });
+    }
+    private void initViews() {
+        clickBtn = findViewById(R.id.clickBtn);
+        tokenTV = findViewById(R.id.tokenTV);
+
+    }
+
+    private void createToken() {
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (task.isSuccessful()){
+                            if (task.getResult() != null){
+                                String token = task.getResult().getToken();
+                                tokenTV.setText("Token: "+ token);
+                            }
+
+                        }else {
+                            tokenTV.setText(task.getException().getMessage());
+                        }
+                    }
+                });
     }
 
     private void initAlertDetails() {
@@ -54,10 +88,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void initViews() {
-        notiBtn = findViewById(R.id.notiBtn);
 
-    }
 
     private void displayNotification() {
         NotificationCompat.Builder builder =
