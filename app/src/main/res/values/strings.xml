@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">AndroidNotification</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="sign_up">sign up</string>
+    <string name="you_have_a_account">You Have A Account?</string>
+    <string name="sign_in">SignIn</string>
+    <string name="logout">Logout</string>
+    <string name="click">Click</string>
+    <string name="confirm_password">Confirm Password</string>
 </resources>
