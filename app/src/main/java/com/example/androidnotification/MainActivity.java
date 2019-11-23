@@ -13,6 +13,7 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -28,6 +29,7 @@ import com.google.firebase.iid.InstanceIdResult;
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
+    private String title;
 
 
     @Override
@@ -36,6 +38,20 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mAuth = FirebaseAuth.getInstance();
+
+        title = getIntent().getStringExtra("value");
+        /*if (title != null){
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragmentContainer, new NotificationFragment())
+                    .commit();
+        }*/
+
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        Fragment fragment = new SignInFragment();
+        ft.replace(R.id.fragmentContainer, fragment)
+                .commit();
+
+
 
 
     }
@@ -46,12 +62,22 @@ public class MainActivity extends AppCompatActivity {
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
-        if (currentUser == null) {
+
+       /* if (currentUser == null) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            Fragment fragment = new SignUpFragment();
+            Fragment fragment = new SignInFragment();
             ft.replace(R.id.fragmentContainer, fragment)
                     .commit();
 
+        }*/
+
+        if (currentUser != null && title != null){
+            Log.d("title",title);
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragmentContainer, new NotificationFragment())
+                    .addToBackStack(null)
+                    .commit();
+            return;
         }
         if (currentUser != null) {
             Toast.makeText(this, "user: "+currentUser.getEmail(), Toast.LENGTH_LONG).show();
@@ -61,6 +87,10 @@ public class MainActivity extends AppCompatActivity {
             ft.commit();
 
         }
+
+
+
+
 
 
     }

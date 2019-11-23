@@ -20,10 +20,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
@@ -41,13 +45,14 @@ public class HomeFragment extends Fragment {
     public static final String CHANNEL_DESC =
             "com.example.androidnotification.CHANNEL_DESC";
 
+
+
     private Button clickBtn, logOutBtn;
     private TextView tokenTV;
     private PendingIntent pendingIntent;
     private Context context;
 
     private FirebaseAuth mAuth;
-
 
     public HomeFragment() {
         // Required empty public constructor
@@ -88,7 +93,7 @@ public class HomeFragment extends Fragment {
             public void onClick(View view) {
                 //displayNotification();
 
-                createToken();
+                //createToken();
             }
         });
         logOutBtn.setOnClickListener(new View.OnClickListener() {
@@ -98,7 +103,7 @@ public class HomeFragment extends Fragment {
                 if (getActivity() != null) {
                     getActivity().getSupportFragmentManager()
                             .beginTransaction()
-                            .replace(R.id.fragmentContainer, new SignUpFragment())
+                            .replace(R.id.fragmentContainer, new SignInFragment())
                             .commit();
                 }
 
@@ -108,25 +113,15 @@ public class HomeFragment extends Fragment {
 
     private void initViews() {
         mAuth = FirebaseAuth.getInstance();
+        String userEmail = mAuth.getCurrentUser().getEmail();
+        tokenTV.setText(userEmail);
+
 
     }
 
-    private void createToken() {
-        FirebaseInstanceId.getInstance()
-                .getInstanceId()
-                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                        if (task.isSuccessful() && task.getResult() != null) {
-                            String token = task.getResult().getToken();
-                            tokenTV.setText("Token: " + token);
 
-                        } else {
-                            tokenTV.setText(task.getException().getMessage());
-                        }
-                    }
-                });
-    }
+
+
 
     private void initAlertDetails() {
 
@@ -136,21 +131,7 @@ public class HomeFragment extends Fragment {
     }
 
 
-    private void displayNotification() {
-        NotificationCompat.Builder builder =
-                new NotificationCompat.Builder(context, CHANNEL_ID)
-                        .setSmallIcon(R.drawable.ic_noti_black_24dp)
-                        .setContentTitle("Notification Title")
-                        .setContentText("My Notification")
-                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                        .setContentIntent(pendingIntent)
-                        .setAutoCancel(true);
 
-        NotificationManagerCompat notificationManagerCompat =
-                NotificationManagerCompat.from(context);
-
-        notificationManagerCompat.notify(1, builder.build());
-    }
 
     private void createChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

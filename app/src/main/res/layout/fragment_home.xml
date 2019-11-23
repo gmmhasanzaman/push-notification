@@ -5,6 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".HomeFragment">
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_above="@id/tokenTV"
+        />
 
     <TextView
        android:id="@+id/tokenTV"
@@ -14,7 +22,7 @@
        android:layout_margin="10dp"
        android:padding="10dp"
        android:textColor="#E91E63"
-       tools:text="Token" />
+       tools:text="User Email" />
 
    <Button
        android:id="@+id/clickBtn"

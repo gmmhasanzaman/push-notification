@@ -11,4 +11,5 @@
     <string name="logout">Logout</string>
     <string name="click">Click</string>
     <string name="confirm_password">Confirm Password</string>
+    <string name="already_have_an_account">Already have an account?</string>
 </resources>
